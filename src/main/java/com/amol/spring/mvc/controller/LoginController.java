@@ -1,4 +1,5 @@
 package com.amol.spring.mvc.controller; 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -6,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amol.spring.data.jpa.repository.UserRepository;
 import com.amol.spring.mvc.model.User;
 
 /**
@@ -15,6 +17,9 @@ import com.amol.spring.mvc.model.User;
 @Controller
 public class LoginController {
 	
+	@Autowired
+	UserRepository userRepository;
+
 	
 	//value parameter is alias to path - both are equivalent.
 	@RequestMapping(value="/login", method=RequestMethod.GET)
@@ -31,7 +36,9 @@ public class LoginController {
 		System.out.println("LoginController -> login user name=" + user.getUserName());
 		System.out.println("LoginController -> login user password=" + user.getPassword());
 		
-		
+		com.amol.spring.data.jpa.entity.User userEntity = new com.amol.spring.data.jpa.entity.User();
+		userEntity.setName(user.getUserName());
+		userRepository.save(userEntity);
 		model.addAttribute("user", user.getUserName());
 		return "welcome";
 		
