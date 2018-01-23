@@ -1,5 +1,8 @@
 package com.amol.spring.mvc.controller; 
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amol.spring.data.jpa.entity.Address;
 import com.amol.spring.data.jpa.repository.AddressRepository;
 import com.amol.spring.data.jpa.repository.UserRepository;
 import com.amol.spring.mvc.model.User;
@@ -43,13 +47,27 @@ public class LoginController {
 		
 		com.amol.spring.data.jpa.entity.User userEntity = new com.amol.spring.data.jpa.entity.User();
 		userEntity.setName(user.getUserName());
-		userRepository.save(userEntity);
 		
-		com.amol.spring.data.jpa.entity.Address addressEntity = new com.amol.spring.data.jpa.entity.Address();
+		Address addressEntity = new Address();
 		addressEntity.setAddressLine1("addressLine1");
 		addressEntity.setAddressLine2("addressLine2");
 		addressEntity.setPostCode("AB1 2CD");
-		addressRepository.save(addressEntity);
+		
+		Address addressEntity2 = new Address();
+		addressEntity2.setAddressLine1("addressLine1");
+		addressEntity2.setAddressLine2("addressLine2");
+		addressEntity2.setPostCode("AB1 2CD");
+		
+		//object references an unsaved transient instance - save the transient instance before flushing: 
+		//com.amol.spring.data.jpa.entity.Address
+		// FIX- CascadeType.ALL
+	
+		Set<Address> addresses = new HashSet<Address>();
+		addresses.add(addressEntity);
+		addresses.add(addressEntity2);
+		userEntity.setAddresses(addresses);
+		
+		userRepository.save(userEntity);
 		
 		model.addAttribute("user", user.getUserName());
 		return "welcome";
