@@ -48,25 +48,6 @@ public class LoginController {
 		com.amol.spring.data.jpa.entity.User userEntity = new com.amol.spring.data.jpa.entity.User();
 		userEntity.setName(user.getUserName());
 		
-		Address addressEntity = new Address();
-		addressEntity.setAddressLine1("addressLine1");
-		addressEntity.setAddressLine2("addressLine2");
-		addressEntity.setPostCode("AB1 2CD");
-		
-		Address addressEntity2 = new Address();
-		addressEntity2.setAddressLine1("addressLine1");
-		addressEntity2.setAddressLine2("addressLine2");
-		addressEntity2.setPostCode("AB1 2CD");
-		
-		//object references an unsaved transient instance - save the transient instance before flushing: 
-		//com.amol.spring.data.jpa.entity.Address
-		// FIX- CascadeType.ALL
-	
-		Set<Address> addresses = new HashSet<Address>();
-		addresses.add(addressEntity);
-		addresses.add(addressEntity2);
-		userEntity.setAddresses(addresses);
-		
 		userRepository.save(userEntity);
 		
 		model.addAttribute("user", user.getUserName());
